@@ -1,4 +1,4 @@
-package sl.kacinz.onluanmer.ui
+package sl.kacinz.onluanmer.presentation.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

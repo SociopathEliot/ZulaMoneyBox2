@@ -1,7 +1,12 @@
-package sl.kacinz.onluanmer.ui.fragments
+package sl.kacinz.onluanmer.presentation.ui.fragments.onboarding
 
 import android.content.pm.ActivityInfo
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +16,8 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import sl.kacinz.onluanmer.databinding.FragmentSplashBinding
+import sl.kacinz.onluanmer.presentation.ui.fragments.main.HomeFragment
+import sl.kacinz.onluanmer.presentation.ui.fragments.legal.PrivacyPolicyFragment
 import sl.kacinz.onluanmer.utils.Constants.DEFAULT_DOMAIN_LINK
 import sl.kacinz.onluanmer.utils.Constants.MAIN_OFFER_LINK_KEY
 import sl.kacinz.onluanmer.utils.Constants.USER_STATUS_KEY
@@ -33,9 +40,23 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        handleAppInitialization()
 
         //todo splash animation logic
+        val shader = LinearGradient(
+            0f, 0f, binding.loadingText.paint.measureText(binding.loadingText.text.toString()), binding.loadingText.textSize,
+            intArrayOf(
+                Color.parseColor("#FEDD32"), // start
+                Color.parseColor("#FFEB86"), // middle
+                Color.parseColor("#FEDD32")  // end
+            ),
+            floatArrayOf(0f, 0.5f, 1f),
+            Shader.TileMode.CLAMP
+        )
+        binding.loadingText.paint.shader = shader
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            handleAppInitialization()
+        }, 30_000L)
     }
 
     private fun navigateToProjectFragment() {
