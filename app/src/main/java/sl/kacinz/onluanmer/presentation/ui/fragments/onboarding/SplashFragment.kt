@@ -41,6 +41,8 @@ class SplashFragment : Fragment() {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
 
+        handleAppInitialization()
+
         //todo splash animation logic
         val shader = LinearGradient(
             0f, 0f, binding.loadingText.paint.measureText(binding.loadingText.text.toString()), binding.loadingText.textSize,
@@ -55,7 +57,6 @@ class SplashFragment : Fragment() {
         binding.loadingText.paint.shader = shader
 
         Handler(Looper.getMainLooper()).postDelayed({
-            handleAppInitialization()
         }, 30_000L)
     }
 

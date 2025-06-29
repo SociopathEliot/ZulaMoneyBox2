@@ -40,4 +40,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.volley)
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
