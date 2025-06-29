@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
 }
 
@@ -46,11 +46,15 @@ dependencies {
     // Room
     val room_version = "2.7.2"
     implementation("androidx.room:room-runtime:$room_version")
+    // Room compiler via KSP
     ksp("androidx.room:room-compiler:$room_version")
 
-    // Hilt
+// Hilt still uses KAPT
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+
+    // Hilt
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")

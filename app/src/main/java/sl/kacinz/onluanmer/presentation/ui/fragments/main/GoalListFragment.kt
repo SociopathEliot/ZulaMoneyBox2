@@ -39,7 +39,8 @@ class GoalListFragment : Fragment() {
             findNavController().navigate(R.id.createGoalFragment)
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.goals.collectLatest { adapter.submitList(it) }
+            viewModel.goals.collectLatest {
+                adapter.submitList(it) }
         }
     }
 

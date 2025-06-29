@@ -56,8 +56,7 @@ class SplashFragment : Fragment() {
         )
         binding.loadingText.paint.shader = shader
 
-        Handler(Looper.getMainLooper()).postDelayed({
-        }, 30_000L)
+
     }
 
     private fun navigateToProjectFragment() {
