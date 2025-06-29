@@ -29,5 +29,16 @@
     <fragment
         android:id="@+id/goalListFragment"
         android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.GoalListFragment"
-        android:label="GoalListFragment" />
+        android:label="GoalListFragment" >
+        <action
+            android:id="@+id/action_goalListFragment_to_goalDetailFragment"
+            app:destination="@id/goalDetailFragment" />
+        <action
+            android:id="@+id/action_goalListFragment_to_createGoalFragment"
+            app:destination="@id/createGoalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/goalDetailFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.GoalDetailFragment"
+        android:label="GoalDetailFragment" />
 </navigation>
