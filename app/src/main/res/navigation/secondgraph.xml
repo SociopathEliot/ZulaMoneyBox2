@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/secondgraph.xml"
+    app:startDestination="@id/goalListFragment">
+
+    <fragment
+        android:id="@+id/createGoalFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.CreateGoalFragment"
+        android:label="CreateGoalFragment" >
+        <action
+            android:id="@+id/action_createGoalFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
+        <action
+            android:id="@+id/action_createGoalFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/goalListFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.GoalListFragment"
+        android:label="GoalListFragment" />
+</navigation>

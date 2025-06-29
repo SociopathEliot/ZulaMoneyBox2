@@ -1,0 +1,31 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- фон незаполненной части -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFF8E1"/>
+            <corners android:radius="16dp"/>
+        </shape>
+    </item>
+
+    <!-- дополнительный прогресс (если нужен) -->
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#FFF8E1"/>
+                <corners android:radius="16dp"/>
+            </shape>
+        </clip>
+    </item>
+
+    <!-- заполненная часть -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#FFD338"/>
+                <corners android:radius="16dp"/>
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

@@ -1,0 +1,26 @@
+<!-- res/drawable/bg_arrow_button.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- pressed state -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#1E3399"/>            <!-- чуть светлее при нажатии -->
+            <stroke
+                android:width="2dp"
+                android:color="#FEDD32"/>                <!-- жёлтая рамка -->
+            <corners android:radius="5dp"/>             <!-- скруглённые углы -->
+        </shape>
+    </item>
+
+    <!-- default state -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#00154C"/>            <!-- тёмно-синий фон -->
+            <stroke
+                android:width="2dp"
+                android:color="#FEDD32"/>                <!-- жёлтая рамка -->
+            <corners android:radius="5dp"/>             <!-- скруглённые углы -->
+        </shape>
+    </item>
+
+</selector>
