@@ -6,49 +6,45 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import sl.kacinz.onluanmer.R
-import sl.kacinz.onluanmer.databinding.FragmentCreateGoalBinding
 import sl.kacinz.onluanmer.databinding.FragmentGoalListBinding
 import sl.kacinz.onluanmer.presentation.ui.adapters.GoalAdapter
-import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.GoalListViewModel
-
+import sl.kacinz.onluanmer.presentation.viewmodel.GoalListViewModel
 
 @AndroidEntryPoint
-class GoalListFragment : Fragment(R.layout.fragment_goal_list) {
+class GoalListFragment : Fragment() {
 
-    private val vm: GoalListViewModel by viewModels()
-    private var _b: FragmentGoalListBinding? = null
-    private val b get() = _b!!
+    private var _binding: FragmentGoalListBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: GoalListViewModel by viewModels()
+    private val adapter = GoalAdapter()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentGoalListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _b = FragmentGoalListBinding.bind(view)
-
-        val adapter = GoalAdapter { goal ->
-            // Step 1 nav → GoalDetailFragment
-            findNavController().navigate(
-                R.id.action_goalListFragment_to_goalDetailFragment,
-                Bundle().apply { putLong("goalId", goal.id) }
-            )
+        binding.rvGoals.adapter = adapter
+        binding.btnAddGoal.setOnClickListener {
+            findNavController().navigate(R.id.createGoalFragment)
         }
-
-        b.rvGoals.adapter = adapter
-
-        // observe list of goals
-        vm.goals.observe(viewLifecycleOwner) { list ->
-            adapter.submitList(list)
-        }
-
-        // Step 2 nav → CreateGoalFragment
-        b.btnAddGoal.setOnClickListener {
-            findNavController().navigate(R.id.action_goalListFragment_to_createGoalFragment)
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.goals.collectLatest { adapter.submitList(it) }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _b = null
+        _binding = null
     }
 }

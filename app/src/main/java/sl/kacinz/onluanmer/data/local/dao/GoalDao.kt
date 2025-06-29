@@ -1,19 +1,17 @@
 package sl.kacinz.onluanmer.data.local.dao
 
-
-
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import sl.kacinz.onluanmer.data.local.GoalEntity
+import sl.kacinz.onluanmer.domain.model.Goal
 
 @Dao
 interface GoalDao {
     @Query("SELECT * FROM goals")
-    fun getAll(): Flow<List<GoalEntity>>
+    fun getGoals(): Flow<List<Goal>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(goal: GoalEntity)
-
-    @Query("SELECT * FROM goals WHERE id = :id LIMIT 1")
-    suspend fun findById(id: Long): GoalEntity?
+    suspend fun insertGoal(goal: Goal)
 }

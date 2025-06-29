@@ -1,10 +1,13 @@
 package sl.kacinz.onluanmer.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "goals")
 data class Goal(
-    val id: Long = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val targetAmount: Double,
-    val currentAmount: Double = 0.0,
-    val imageUri: String? = null,
-    val targetDate: Long
+    val targetAmount: String,
+    val date: String,
+    val imageUri: String
 )

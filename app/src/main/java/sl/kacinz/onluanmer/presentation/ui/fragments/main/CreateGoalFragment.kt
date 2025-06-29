@@ -1,63 +1,78 @@
 package sl.kacinz.onluanmer.presentation.ui.fragments.main
 
+import android.app.DatePickerDialog
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import sl.kacinz.onluanmer.R
-import sl.kacinz.onluanmer.databinding.FragmentCreateGoalBinding
-import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.CreateGoalViewModel
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import sl.kacinz.onluanmer.databinding.FragmentCreateGoalBinding
 import sl.kacinz.onluanmer.domain.model.Goal
-import java.text.SimpleDateFormat
-import java.util.*
+import sl.kacinz.onluanmer.presentation.viewmodel.CreateGoalViewModel
+import java.util.Calendar
 
 @AndroidEntryPoint
-class CreateGoalFragment : Fragment(R.layout.fragment_create_goal) {
+class CreateGoalFragment : Fragment() {
 
-    private val vm: CreateGoalViewModel by viewModels()
-    private var _b: FragmentCreateGoalBinding? = null
-    private val b get() = _b!!
+    private var _binding: FragmentCreateGoalBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: CreateGoalViewModel by viewModels()
+
+    private var imageUri: Uri? = null
+
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            imageUri = it
+            val iv = ImageView(requireContext())
+            iv.setImageURI(it)
+            binding.imagePicker.removeAllViews()
+            binding.imagePicker.addView(iv)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentCreateGoalBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _b = FragmentCreateGoalBinding.bind(view)
+        binding.etDate.setOnClickListener { openDatePicker() }
+        binding.imagePicker.setOnClickListener { imagePickerLauncher.launch("image/*") }
+        binding.btnGetStarted.setOnClickListener { saveGoal() }
+    }
 
-        b.btnGetStarted.setOnClickListener {
-            val name   = b.etGoalName.text.toString().trim()
-            val amount = b.etTargetAmount.text.toString().toDoubleOrNull()
-            val dateStr= b.etDate.text.toString().trim()
-            if (name.isEmpty() || amount == null || dateStr.isEmpty()) {
-                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun openDatePicker() {
+        val c = Calendar.getInstance()
+        DatePickerDialog(requireContext(), { _, year, month, day ->
+            val formatted = String.format("%02d.%02d.%04d", day, month + 1, year)
+            binding.etDate.setText(formatted)
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show()
+    }
 
-            // parse dd.MM.yyyy → epoch millis
-            val fmt = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-            val dateMillis = runCatching { fmt.parse(dateStr)!!.time }
-                .getOrElse {
-                    Toast.makeText(requireContext(), "Bad date format", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-            val goal = Goal(
-                name          = name,
-                targetAmount  = amount,
-                targetDate    = dateMillis
-            )
-
-            // save to Room
-            vm.create(goal)
-
-            // back to list
+    private fun saveGoal() {
+        val name = binding.etGoalName.text.toString()
+        val amount = binding.etTargetAmount.text.toString()
+        val date = binding.etDate.text.toString()
+        val img = imageUri?.toString() ?: return
+        if (name.isNotBlank() && amount.isNotBlank() && date.isNotBlank()) {
+            viewModel.createGoal(Goal(name = name, targetAmount = amount, date = date, imageUri = img))
             findNavController().popBackStack()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _b = null
+        _binding = null
     }
 }

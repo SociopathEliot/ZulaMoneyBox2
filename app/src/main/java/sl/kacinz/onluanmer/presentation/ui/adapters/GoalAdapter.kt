@@ -5,42 +5,31 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import sl.kacinz.onluanmer.databinding.ItemGoalBinding
 import sl.kacinz.onluanmer.domain.model.Goal
 
-class GoalAdapter(
-    private val onClick: (Goal) -> Unit
-) : ListAdapter<Goal, GoalAdapter.GoalVH>(DIFF) {
-
-    companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<Goal>() {
-            override fun areItemsTheSame(old: Goal, new: Goal) = old.id == new.id
-            override fun areContentsTheSame(old: Goal, new: Goal) = old == new
-        }
+class GoalAdapter : ListAdapter<Goal, GoalAdapter.GoalViewHolder>(DiffCallback) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
+        val binding = ItemGoalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return GoalViewHolder(binding)
     }
 
-    inner class GoalVH(private val b: ItemGoalBinding) :
-        RecyclerView.ViewHolder(b.root) {
+    override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    class GoalViewHolder(private val binding: ItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(goal: Goal) {
-            b.tvGoalTitle.text = goal.name
-            b.pbGoal.max = goal.targetAmount.toInt()
-            b.pbGoal.progress = goal.currentAmount.toInt()
-            b.tvProgressText.text = "%,d$ / %,d$".format(
-                goal.currentAmount.toLong(),
-                goal.targetAmount.toLong()
-            )
-            val percent = if (goal.targetAmount > 0)
-                (goal.currentAmount / goal.targetAmount * 100).toInt()
-            else 0
-            b.tvGoalPercent.text = "$percent%"
-            // TODO: load goal.imageUri into b.ivGoalImage with Glide/Picasso if you like
-            b.cardGoal.setOnClickListener { onClick(goal) }
+            binding.tvGoalTitle.text = goal.name
+            Glide.with(binding.ivGoalImage).load(goal.imageUri).into(binding.ivGoalImage)
+            // progress etc skipped for simplicity
+            binding.tvProgressText.text = "${goal.targetAmount}"
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        GoalVH(ItemGoalBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-
-    override fun onBindViewHolder(holder: GoalVH, pos: Int) =
-        holder.bind(getItem(pos))
+    private object DiffCallback : DiffUtil.ItemCallback<Goal>() {
+        override fun areItemsTheSame(oldItem: Goal, newItem: Goal): Boolean = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Goal, newItem: Goal): Boolean = oldItem == newItem
+    }
 }
