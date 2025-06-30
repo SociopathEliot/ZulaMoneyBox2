@@ -5,5 +5,6 @@ import sl.kacinz.onluanmer.domain.model.Transaction
 
 interface TransactionRepository {
     fun getTransactions(goalId: Int): Flow<List<Transaction>>
+    fun getAllTransactions(): Flow<List<Transaction>>
     suspend fun insertTransaction(transaction: Transaction)
 }

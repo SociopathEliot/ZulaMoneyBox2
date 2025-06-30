@@ -10,5 +10,6 @@ class TransactionRepositoryImpl @Inject constructor(
     private val dao: TransactionDao
 ) : TransactionRepository {
     override fun getTransactions(goalId: Int): Flow<List<Transaction>> = dao.getTransactions(goalId)
+    override fun getAllTransactions(): Flow<List<Transaction>> = dao.getAllTransactions()
     override suspend fun insertTransaction(transaction: Transaction) = dao.insertTransaction(transaction)
 }
