@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import sl.kacinz.onluanmer.databinding.FragmentAddTransactionBinding
 import sl.kacinz.onluanmer.domain.model.Transaction
@@ -58,13 +59,14 @@ class AddTransactionFragment : Fragment() {
             comment = comment,
             date = binding.tvDate.text.toString()
         )
-        viewModel.saveTransaction(transaction, updatedGoal)
-        findNavController().previousBackStackEntry?.savedStateHandle?.set(
-            "updated_goal",
-            updatedGoal
-        )
-
-        findNavController().popBackStack()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.saveTransaction(transaction, updatedGoal)
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                "updated_goal",
+                updatedGoal
+            )
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
