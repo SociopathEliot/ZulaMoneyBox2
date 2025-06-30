@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import sl.kacinz.onluanmer.databinding.FragmentGoalDetailBinding
 import sl.kacinz.onluanmer.domain.model.Goal
+
 import sl.kacinz.onluanmer.presentation.ui.adapters.TransactionAdapter
 import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.GoalDetailViewModel
 import java.text.NumberFormat
@@ -95,6 +96,7 @@ class GoalDetailFragment : Fragment() {
 
         val percent = if (target > 0) (current * 100 / target) else 0
         binding.tvPercent.text = "$percent%"
+
     }
 
     override fun onDestroyView() {
