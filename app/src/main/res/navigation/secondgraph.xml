@@ -36,9 +36,29 @@
         <action
             android:id="@+id/action_goalListFragment_to_createGoalFragment"
             app:destination="@id/createGoalFragment" />
+        <action
+            android:id="@+id/action_goalListFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+        <action
+            android:id="@+id/action_goalListFragment_to_withdrawTransactionFragment"
+            app:destination="@id/withdrawTransactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalDetailFragment"
         android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.GoalDetailFragment"
-        android:label="GoalDetailFragment" />
+        android:label="GoalDetailFragment" >
+
+    <argument
+        android:name="goal"
+        app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.AddTransactionFragment"
+        android:label="AddTransactionFragment" />
+    <fragment
+        android:id="@+id/withdrawTransactionFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.WithdrawTransactionFragment"
+        android:label="WithdrawTransactionFragment" />
+
 </navigation>

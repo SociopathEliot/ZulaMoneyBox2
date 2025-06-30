@@ -8,7 +8,7 @@ import java.io.Serializable
 data class Goal(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val targetAmount: String,
+    val targetAmount: Int,
     val date: String,
     val imageUri: String,
     val currentAmount: Int = 0
