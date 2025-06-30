@@ -10,11 +10,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import sl.kacinz.onluanmer.databinding.FragmentGoalDetailBinding
 import sl.kacinz.onluanmer.presentation.ui.adapters.TransactionAdapter
 import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.GoalDetailViewModel
 import java.text.NumberFormat
 
+@AndroidEntryPoint
 class GoalDetailFragment : Fragment() {
 
     private var _binding: FragmentGoalDetailBinding? = null
