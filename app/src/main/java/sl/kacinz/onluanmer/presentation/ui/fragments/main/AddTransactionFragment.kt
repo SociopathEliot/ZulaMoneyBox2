@@ -59,7 +59,11 @@ class AddTransactionFragment : Fragment() {
             date = binding.tvDate.text.toString()
         )
         viewModel.saveTransaction(transaction, updatedGoal)
-        findNavController().popBackStack()
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+            "updated_goal",
+            updatedGoal
+        )
+
     }
 
     override fun onDestroyView() {

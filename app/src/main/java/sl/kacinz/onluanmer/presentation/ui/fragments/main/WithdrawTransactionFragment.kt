@@ -55,12 +55,15 @@ class WithdrawTransactionFragment : Fragment() {
         val transaction = Transaction(
             goalId = goal.id,
             amount = if (isDeposit) amount else -amount,
-
             comment = comment,
             date = binding.tvDate.text.toString()
         )
         viewModel.saveTransaction(transaction, updatedGoal)
-        findNavController().popBackStack()
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+            "updated_goal",
+            updatedGoal
+        )
+
     }
 
     override fun onDestroyView() {
