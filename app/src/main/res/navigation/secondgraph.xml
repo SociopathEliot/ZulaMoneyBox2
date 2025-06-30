@@ -90,6 +90,9 @@
                 android:name="isDeposit"
                 app:argType="boolean" />
         </action>
+        <action
+            android:id="@+id/action_goalDetailFragment_to_progressFragment"
+            app:destination="@id/progressFragment" />
     </fragment>
 
     <!-- Add Transaction -->
@@ -119,5 +122,9 @@
             app:argType="boolean"
             android:defaultValue="false" />
     </fragment>
+    <fragment
+        android:id="@+id/progressFragment"
+        android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.ProgressFragment"
+        android:label="ProgressFragment" />
 
 </navigation>

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import sl.kacinz.onluanmer.R
 import sl.kacinz.onluanmer.databinding.FragmentGoalDetailBinding
 import sl.kacinz.onluanmer.domain.model.Goal
 import sl.kacinz.onluanmer.domain.model.Transaction
@@ -76,6 +77,10 @@ class GoalDetailFragment : Fragment() {
                         updateList()
                     }
             }
+        }
+
+        binding.btnProgress.setOnClickListener {
+            findNavController().navigate(R.id.action_goalDetailFragment_to_progressFragment)
         }
 
 
