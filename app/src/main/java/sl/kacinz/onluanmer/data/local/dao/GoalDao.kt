@@ -14,4 +14,7 @@ interface GoalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGoal(goal: Goal)
+
+    @androidx.room.Update
+    suspend fun updateGoal(goal: Goal)
 }
