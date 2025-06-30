@@ -53,7 +53,6 @@ class GoalDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         currentGoal = args.goal
         updateGoalUI(currentGoal!!)
 
@@ -67,7 +66,6 @@ class GoalDetailFragment : Fragment() {
 
         binding.rvTransactions.adapter = adapter
 
-        // слушаем поток транзакций
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.transactions(args.goal.id)
