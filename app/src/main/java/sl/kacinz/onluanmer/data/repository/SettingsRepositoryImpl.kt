@@ -18,6 +18,9 @@ class SettingsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearAllData() {
-        db.clearAllTables()
+        withContext(Dispatchers.IO) {
+            db.clearAllTables()
+        }
+
     }
 }
