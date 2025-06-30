@@ -38,7 +38,9 @@ class WithdrawTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.ivBack.setOnClickListener { findNavController().popBackStack() }
         binding.tvDate.text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-        binding.btnSave.setOnClickListener { saveTransaction() }
+        binding.btnSave.setOnClickListener {
+            saveTransaction()
+        }
     }
 
     private fun saveTransaction() {
@@ -59,10 +61,13 @@ class WithdrawTransactionFragment : Fragment() {
             date = binding.tvDate.text.toString()
         )
         viewModel.saveTransaction(transaction, updatedGoal)
+
         findNavController().previousBackStackEntry?.savedStateHandle?.set(
             "updated_goal",
             updatedGoal
         )
+
+        findNavController().popBackStack()
 
     }
 

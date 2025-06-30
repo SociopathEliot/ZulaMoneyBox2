@@ -64,6 +64,7 @@ class AddTransactionFragment : Fragment() {
             updatedGoal
         )
 
+        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {

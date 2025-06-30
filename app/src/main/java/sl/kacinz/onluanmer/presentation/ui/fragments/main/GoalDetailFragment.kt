@@ -8,12 +8,17 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.Observer
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import sl.kacinz.onluanmer.databinding.FragmentGoalDetailBinding
 import sl.kacinz.onluanmer.domain.model.Goal
+import sl.kacinz.onluanmer.domain.model.Transaction
 
 import sl.kacinz.onluanmer.presentation.ui.adapters.TransactionAdapter
 import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.GoalDetailViewModel
@@ -25,13 +30,16 @@ class GoalDetailFragment : Fragment() {
     private var _binding: FragmentGoalDetailBinding? = null
     private val binding get() = _binding!!
 
-    // типобезопасный аргумент Goal
     private val args: GoalDetailFragmentArgs by navArgs()
     private val viewModel: GoalDetailViewModel by viewModels()
     private val adapter = TransactionAdapter()
     private var currentGoal: Goal? = null
     private val numberFormatter: NumberFormat =
         NumberFormat.getIntegerInstance().apply { isGroupingUsed = true }
+
+    // список всех транзакций и флаг, показываем ли мы все
+    private var transactions = listOf<Transaction>()
+    private var showingAll = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,21 +52,38 @@ class GoalDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         currentGoal = args.goal
         updateGoalUI(currentGoal!!)
 
-        findNavController().currentBackStackEntry?.savedStateHandle
+        findNavController().currentBackStackEntry
+            ?.savedStateHandle
             ?.getLiveData<Goal>("updated_goal")
-            ?.observe(viewLifecycleOwner, Observer { goal ->
-                currentGoal = goal
+            ?.observe(viewLifecycleOwner) { goal ->
                 updateGoalUI(goal)
-            })
+                currentGoal = goal
+            }
 
         binding.rvTransactions.adapter = adapter
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            currentGoal?.let { goal ->
-                viewModel.transactions(goal.id).collect { adapter.submitList(it) }
+
+        // слушаем поток транзакций
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.transactions(args.goal.id)
+                    .collectLatest { list ->
+                        transactions = list
+                        showingAll = false
+                        updateList()
+                    }
             }
+        }
+
+
+
+        // обработчик «Show more / Show less»
+        binding.tvShowMore.setOnClickListener {
+            showingAll = !showingAll
+            updateList()
         }
 
         binding.btnAddSaving.setOnClickListener {
@@ -68,6 +93,7 @@ class GoalDetailFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+
         binding.btnWithdraw.setOnClickListener {
             currentGoal?.let { goal ->
                 val action = GoalDetailFragmentDirections
@@ -76,9 +102,24 @@ class GoalDetailFragment : Fragment() {
             }
         }
 
-        // Обработка возврата назад
-        binding.ivBack.setOnClickListener { findNavController().popBackStack() }
-        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
+        listOf(binding.ivBack, binding.btnBack).forEach { view ->
+            view.setOnClickListener { findNavController().popBackStack() }
+        }
+
+    }
+
+    private fun updateList() {
+        // формируем список для адаптера
+        val toShow = if (showingAll) transactions else transactions.take(3)
+        adapter.submitList(toShow)
+
+        // если всего элементов ≤ 3 — прячем кнопку
+        if (transactions.size <= 3) {
+            binding.tvShowMore.visibility = View.GONE
+        } else {
+            binding.tvShowMore.visibility = View.VISIBLE
+            binding.tvShowMore.text = if (showingAll) "Show less" else "Show more..."
+        }
     }
 
     private fun updateGoalUI(goal: Goal) {

@@ -44,6 +44,10 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.volley)
 
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android)
+
+
     // Room
     val room_version = "2.7.2"
     implementation("androidx.room:room-runtime:$room_version")
