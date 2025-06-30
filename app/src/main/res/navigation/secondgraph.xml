@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/secondgraph.xml"
+    android:id="@+id/nav_second_graph"
     app:startDestination="@id/goalListFragment">
 
     <fragment
@@ -48,17 +48,49 @@
         android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.GoalDetailFragment"
         android:label="GoalDetailFragment" >
 
-    <argument
-        android:name="goal"
-        app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+        <argument
+            android:name="goal"
+            app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+        <argument
+            android:name="isDeposit"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_goalDetailFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" >
+            <argument android:name="goal" app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+            <argument android:name="isDeposit" app:argType="boolean" />
+        </action>
+        <action
+            android:id="@+id/action_goalDetailFragment_to_withdrawTransactionFragment"
+            app:destination="@id/withdrawTransactionFragment" >
+            <argument android:name="goal" app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+            <argument android:name="isDeposit" app:argType="boolean" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
         android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.AddTransactionFragment"
-        android:label="AddTransactionFragment" />
+        android:label="AddTransactionFragment" >
+        <argument
+            android:name="goal"
+            app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+        <argument
+            android:name="isDeposit"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
     <fragment
         android:id="@+id/withdrawTransactionFragment"
         android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.WithdrawTransactionFragment"
-        android:label="WithdrawTransactionFragment" />
+        android:label="WithdrawTransactionFragment" >
+        <argument
+            android:name="goal"
+            app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+        <argument
+            android:name="isDeposit"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
 
 </navigation>
