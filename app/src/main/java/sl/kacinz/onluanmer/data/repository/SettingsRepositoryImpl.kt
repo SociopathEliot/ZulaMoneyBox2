@@ -6,8 +6,6 @@ import sl.kacinz.onluanmer.data.local.db.AppDatabase
 import sl.kacinz.onluanmer.domain.model.AppSettings
 import sl.kacinz.onluanmer.domain.repository.SettingsRepository
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class SettingsRepositoryImpl @Inject constructor(
     private val dao: SettingsDao,
@@ -23,5 +21,6 @@ class SettingsRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             db.clearAllTables()
         }
+
     }
 }
