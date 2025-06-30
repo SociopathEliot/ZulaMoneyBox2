@@ -55,6 +55,7 @@ class WithdrawTransactionFragment : Fragment() {
         val transaction = Transaction(
             goalId = goal.id,
             amount = if (isDeposit) amount else -amount,
+
             comment = comment,
             date = binding.tvDate.text.toString()
         )
