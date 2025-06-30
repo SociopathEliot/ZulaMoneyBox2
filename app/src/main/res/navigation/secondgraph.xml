@@ -125,6 +125,10 @@
     <fragment
         android:id="@+id/progressFragment"
         android:name="sl.kacinz.onluanmer.presentation.ui.fragments.main.ProgressFragment"
-        android:label="ProgressFragment" />
+        android:label="ProgressFragment">
+        <argument
+            android:name="goal"
+            app:argType="sl.kacinz.onluanmer.domain.model.Goal" />
+    </fragment>
 
 </navigation>

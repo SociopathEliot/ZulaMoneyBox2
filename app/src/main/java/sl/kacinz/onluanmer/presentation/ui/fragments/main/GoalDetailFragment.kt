@@ -80,7 +80,11 @@ class GoalDetailFragment : Fragment() {
         }
 
         binding.btnProgress.setOnClickListener {
-            findNavController().navigate(R.id.action_goalDetailFragment_to_progressFragment)
+            currentGoal?.let { goal ->
+                val action = GoalDetailFragmentDirections
+                    .actionGoalDetailFragmentToProgressFragment(goal)
+                findNavController().navigate(action)
+            }
         }
 
 
