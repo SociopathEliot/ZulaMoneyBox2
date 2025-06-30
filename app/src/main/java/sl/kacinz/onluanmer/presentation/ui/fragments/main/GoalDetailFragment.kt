@@ -7,8 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import sl.kacinz.onluanmer.databinding.FragmentGoalDetailBinding
+import sl.kacinz.onluanmer.presentation.ui.adapters.TransactionAdapter
+import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.GoalDetailViewModel
 import java.text.NumberFormat
 
 class GoalDetailFragment : Fragment() {
@@ -18,6 +22,8 @@ class GoalDetailFragment : Fragment() {
 
     // типобезопасный аргумент Goal
     private val args: GoalDetailFragmentArgs by navArgs()
+    private val viewModel: GoalDetailViewModel by viewModels()
+    private val adapter = TransactionAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +61,20 @@ class GoalDetailFragment : Fragment() {
         // Процент выполнения
         val percent = if (target > 0) (current * 100 / target) else 0
         binding.tvPercent.text = "$percent%"
+
+        binding.rvTransactions.adapter = adapter
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.transactions(goal.id).collect { adapter.submitList(it) }
+        }
+
+        binding.btnAddSaving.setOnClickListener {
+            val action = GoalDetailFragmentDirections.actionGoalDetailFragmentToAddTransactionFragment(goal)
+            findNavController().navigate(action)
+        }
+        binding.btnWithdraw.setOnClickListener {
+            val action = GoalDetailFragmentDirections.actionGoalDetailFragmentToWithdrawTransactionFragment(goal)
+            findNavController().navigate(action)
+        }
 
         // Обработка возврата назад
         binding.ivBack.setOnClickListener { findNavController().popBackStack() }
