@@ -10,14 +10,21 @@ import android.widget.ImageView
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import sl.kacinz.onluanmer.R
 import sl.kacinz.onluanmer.databinding.FragmentSettingsBinding
+import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.SettingsViewModel
 
+@AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
+    private val viewModel: SettingsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +47,16 @@ class SettingsFragment : Fragment() {
             findNavController().popBackStack(R.id.goalListFragment, false)
         }
         binding.btnResetAll.setOnClickListener {
-            showSelectCurrencyDialog()
+            showConfirmResetDialog()
         }
         binding.llSelectCurrency.setOnClickListener {
             showSelectCurrencyDialog()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.currency.collectLatest { cur ->
+                cur?.let { binding.tvCurrentCurrency.text = it }
+            }
         }
     }
 
@@ -79,18 +92,32 @@ class SettingsFragment : Fragment() {
         dialogView.findViewById<MaterialButton>(R.id.btn_ok).setOnClickListener {
             val sel = currencies[np.value]
             binding.tvCurrentCurrency.text = sel
+            viewModel.setCurrency(sel)
             dialog.dismiss()
-            // TODO: тут ваш код сохранения выбора, если нужно
+        }
+    }
+
+    private fun showConfirmResetDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_confirm_reset, null, false)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+
+        view.findViewById<MaterialButton>(R.id.btn_cancel).setOnClickListener {
+            dialog.dismiss()
+        }
+        view.findViewById<MaterialButton>(R.id.btn_delete).setOnClickListener {
+            clearAllAppData()
+            dialog.dismiss()
         }
     }
 
     private fun clearAllAppData() {
-        // Здесь очищаем весь Room — пример:
-        // val db = AppDatabase.getInstance(requireContext())
-        // db.clearAllTables()
-
+        viewModel.clearAll()
         Toast.makeText(requireContext(), "All data reset", Toast.LENGTH_SHORT).show()
-        // При желании — сразу вернуться:
         findNavController().popBackStack(R.id.goalListFragment, false)
     }
 }

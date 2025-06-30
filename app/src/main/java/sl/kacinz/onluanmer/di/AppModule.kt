@@ -10,11 +10,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 import sl.kacinz.onluanmer.data.local.dao.GoalDao
 import sl.kacinz.onluanmer.data.local.dao.TransactionDao
+import sl.kacinz.onluanmer.data.local.dao.SettingsDao
 import sl.kacinz.onluanmer.data.local.db.AppDatabase
 import sl.kacinz.onluanmer.data.repository.GoalRepositoryImpl
 import sl.kacinz.onluanmer.data.repository.TransactionRepositoryImpl
+import sl.kacinz.onluanmer.data.repository.SettingsRepositoryImpl
 import sl.kacinz.onluanmer.domain.repository.GoalRepository
 import sl.kacinz.onluanmer.domain.repository.TransactionRepository
+import sl.kacinz.onluanmer.domain.repository.SettingsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,8 +36,17 @@ object AppModule {
     fun provideTransactionDao(db: AppDatabase): TransactionDao = db.transactionDao()
 
     @Provides
+    fun provideSettingsDao(db: AppDatabase): SettingsDao = db.settingsDao()
+
+    @Provides
     fun provideGoalRepository(dao: GoalDao): GoalRepository = GoalRepositoryImpl(dao)
 
     @Provides
     fun provideTransactionRepository(dao: TransactionDao): TransactionRepository = TransactionRepositoryImpl(dao)
+
+    @Provides
+    fun provideSettingsRepository(
+        dao: SettingsDao,
+        db: AppDatabase
+    ): SettingsRepository = SettingsRepositoryImpl(dao, db)
 }
