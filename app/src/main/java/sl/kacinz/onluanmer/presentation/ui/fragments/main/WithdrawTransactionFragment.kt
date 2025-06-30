@@ -49,11 +49,13 @@ class WithdrawTransactionFragment : Fragment() {
         }
         val comment = binding.etComment.text.toString()
         val goal = args.goal
-        val newAmount = goal.currentAmount - amount
+        val isDeposit = args.isDeposit
+        val newAmount = if (isDeposit) goal.currentAmount + amount else goal.currentAmount - amount
         val updatedGoal = goal.copy(currentAmount = newAmount)
         val transaction = Transaction(
             goalId = goal.id,
-            amount = -amount,
+            amount = if (isDeposit) amount else -amount,
+
             comment = comment,
             date = binding.tvDate.text.toString()
         )

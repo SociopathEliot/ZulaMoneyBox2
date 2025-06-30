@@ -70,11 +70,13 @@ class GoalDetailFragment : Fragment() {
         }
 
         binding.btnAddSaving.setOnClickListener {
-            val action = GoalDetailFragmentDirections.actionGoalDetailFragmentToAddTransactionFragment(goal)
+            val action = GoalDetailFragmentDirections
+                .actionGoalDetailFragmentToAddTransactionFragment(goal, true)
             findNavController().navigate(action)
         }
         binding.btnWithdraw.setOnClickListener {
-            val action = GoalDetailFragmentDirections.actionGoalDetailFragmentToWithdrawTransactionFragment(goal)
+            val action = GoalDetailFragmentDirections
+                .actionGoalDetailFragmentToWithdrawTransactionFragment(goal, false)
             findNavController().navigate(action)
         }
 
