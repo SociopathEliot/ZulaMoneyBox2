@@ -26,6 +26,7 @@ import sl.kacinz.onluanmer.R
 import sl.kacinz.onluanmer.databinding.FragmentProgressBinding
 import sl.kacinz.onluanmer.domain.model.Transaction
 import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.ProgressViewModel
+import sl.kacinz.onluanmer.utils.TimeRange
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -193,10 +194,4 @@ class ProgressFragment : Fragment() {
         _binding = null
     }
 
-    enum class TimeRange(val label: String, val days: Long?) {
-        LAST_WEEK("Last week", 7),
-        LAST_MONTH("Last month", 30),
-        LAST_YEAR("Last year", 365),
-        ALL_TIME("All time", null)
-    }
 }
