@@ -11,5 +11,5 @@ class GoalRepositoryImpl @Inject constructor(
 ) : GoalRepository {
     override fun getGoals(): Flow<List<Goal>> = goalDao.getGoals()
     override suspend fun insertGoal(goal: Goal) = goalDao.insertGoal(goal)
-    override suspend fun updateGoal(goal: Goal) = goalDao.insertGoal(goal)
+    override suspend fun updateGoal(goal: Goal) = goalDao.updateGoal(goal)
 }

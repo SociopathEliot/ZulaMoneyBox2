@@ -12,6 +12,9 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE goalId = :goalId ORDER BY id DESC")
     fun getTransactions(goalId: Int): Flow<List<Transaction>>
 
+    @Query("SELECT * FROM transactions ORDER BY id DESC")
+    fun getAllTransactions(): Flow<List<Transaction>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction)
 }
