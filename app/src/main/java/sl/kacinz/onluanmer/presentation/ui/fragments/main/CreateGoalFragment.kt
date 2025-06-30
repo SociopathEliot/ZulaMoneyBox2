@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sl.kacinz.onluanmer.databinding.FragmentCreateGoalBinding
 import sl.kacinz.onluanmer.domain.model.Goal
-import sl.kacinz.onluanmer.presentation.viewmodel.CreateGoalViewModel
+import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.CreateGoalViewModel
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -56,17 +56,19 @@ class CreateGoalFragment : Fragment() {
         val c = Calendar.getInstance()
         DatePickerDialog(requireContext(), { _, year, month, day ->
             val formatted = String.format("%02d.%02d.%04d", day, month + 1, year)
-            binding.etDate.setText(formatted)
+            binding.tvDate.setText(formatted)
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show()
     }
 
     private fun saveGoal() {
         val name = binding.etGoalName.text.toString()
         val amount = binding.etTargetAmount.text.toString()
-        val date = binding.etDate.text.toString()
+        val date = binding.tvDate.text.toString()
         val img = imageUri?.toString() ?: return
         if (name.isNotBlank() && amount.isNotBlank() && date.isNotBlank()) {
-            viewModel.createGoal(Goal(name = name, targetAmount = amount, date = date, imageUri = img))
+            viewModel.createGoal(
+                Goal(name = name, targetAmount = amount, date = date, imageUri = img)
+            )
             findNavController().popBackStack()
         }
     }
@@ -76,3 +78,5 @@ class CreateGoalFragment : Fragment() {
         _binding = null
     }
 }
+
+

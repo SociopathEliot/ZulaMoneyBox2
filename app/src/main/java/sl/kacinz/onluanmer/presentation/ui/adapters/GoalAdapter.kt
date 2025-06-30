@@ -9,7 +9,10 @@ import com.bumptech.glide.Glide
 import sl.kacinz.onluanmer.databinding.ItemGoalBinding
 import sl.kacinz.onluanmer.domain.model.Goal
 
-class GoalAdapter : ListAdapter<Goal, GoalAdapter.GoalViewHolder>(DiffCallback) {
+
+class GoalAdapter(
+    private val onClick: (Goal) -> Unit
+) : ListAdapter<Goal, GoalAdapter.GoalViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
         val binding = ItemGoalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GoalViewHolder(binding)
@@ -19,12 +22,17 @@ class GoalAdapter : ListAdapter<Goal, GoalAdapter.GoalViewHolder>(DiffCallback) 
         holder.bind(getItem(position))
     }
 
-    class GoalViewHolder(private val binding: ItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class GoalViewHolder(private val binding: ItemGoalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(goal: Goal) {
             binding.tvGoalTitle.text = goal.name
             Glide.with(binding.ivGoalImage).load(goal.imageUri).into(binding.ivGoalImage)
-            // progress etc skipped for simplicity
-            binding.tvProgressText.text = "${goal.targetAmount}"
+            val target = goal.targetAmount.filter { it.isDigit() }.toIntOrNull() ?: 0
+            binding.pbGoal.max = target
+            binding.pbGoal.progress = goal.currentAmount
+            binding.tvProgressText.text = "${goal.currentAmount} / ${goal.targetAmount}"
+            val percent = if (target == 0) 0 else (goal.currentAmount * 100 / target)
+            binding.tvGoalPercent.text = "$percent%"
+            binding.root.setOnClickListener { onClick(goal) }
         }
     }
 

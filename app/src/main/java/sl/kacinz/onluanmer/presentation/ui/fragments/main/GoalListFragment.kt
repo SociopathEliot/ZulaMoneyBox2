@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 import sl.kacinz.onluanmer.R
 import sl.kacinz.onluanmer.databinding.FragmentGoalListBinding
 import sl.kacinz.onluanmer.presentation.ui.adapters.GoalAdapter
-import sl.kacinz.onluanmer.presentation.viewmodel.GoalListViewModel
+import sl.kacinz.onluanmer.presentation.ui.fragments.viewmodels.GoalListViewModel
 
 @AndroidEntryPoint
 class GoalListFragment : Fragment() {
@@ -22,7 +22,7 @@ class GoalListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: GoalListViewModel by viewModels()
-    private val adapter = GoalAdapter()
+    private val adapter = GoalAdapter { onGoalClick(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +42,11 @@ class GoalListFragment : Fragment() {
             viewModel.goals.collectLatest {
                 adapter.submitList(it) }
         }
+    }
+
+    private fun onGoalClick(goal: sl.kacinz.onluanmer.domain.model.Goal) {
+        val bundle = Bundle().apply { putSerializable("goal", goal) }
+        findNavController().navigate(R.id.goalDetailFragment, bundle)
     }
 
     override fun onDestroyView() {

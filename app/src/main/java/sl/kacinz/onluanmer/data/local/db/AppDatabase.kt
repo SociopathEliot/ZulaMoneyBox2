@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import sl.kacinz.onluanmer.data.local.dao.GoalDao
 import sl.kacinz.onluanmer.domain.model.Goal
 
-@Database(entities = [Goal::class], version = 1, exportSchema = false)
+@Database(entities = [Goal::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun goalDao(): GoalDao
 }
