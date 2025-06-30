@@ -10,6 +10,8 @@ class GoalRepositoryImpl @Inject constructor(
     private val goalDao: GoalDao
 ) : GoalRepository {
     override fun getGoals(): Flow<List<Goal>> = goalDao.getGoals()
+    override fun getTotalCurrentAmount(): Flow<Int?> = goalDao.getTotalCurrentAmount()
+    override fun getActiveGoalsCount(): Flow<Int> = goalDao.getActiveGoalsCount()
     override suspend fun insertGoal(goal: Goal) = goalDao.insertGoal(goal)
     override suspend fun updateGoal(goal: Goal) = goalDao.updateGoal(goal)
 }

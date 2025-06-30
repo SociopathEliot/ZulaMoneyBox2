@@ -12,6 +12,12 @@ interface GoalDao {
     @Query("SELECT * FROM goals")
     fun getGoals(): Flow<List<Goal>>
 
+    @Query("SELECT SUM(currentAmount) FROM goals")
+    fun getTotalCurrentAmount(): Flow<Int?>
+
+    @Query("SELECT COUNT(*) FROM goals WHERE currentAmount < targetAmount")
+    fun getActiveGoalsCount(): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGoal(goal: Goal)
 

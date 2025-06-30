@@ -77,11 +77,14 @@ class StatisticsFragment : Fragment() {
                     }
                 }
                 launch {
-                    viewModel.goals.collect { goals ->
-                        val total = goals.sumOf { it.currentAmount }
-                        val active = goals.count { it.currentAmount < it.targetAmount }
-                        binding.tvTotalFunds.text = "$total$"
-                        binding.tvActiveGoals.text = active.toString()
+                    viewModel.totalAmount.collect { amount ->
+                        val total = amount ?: 0
+                        binding.tvTotalFunds.text = "${total}$"
+                    }
+                }
+                launch {
+                    viewModel.activeGoals.collect { count ->
+                        binding.tvActiveGoals.text = count.toString()
                     }
                 }
             }
