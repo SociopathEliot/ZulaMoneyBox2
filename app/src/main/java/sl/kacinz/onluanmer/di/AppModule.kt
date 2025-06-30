@@ -28,4 +28,5 @@ object AppModule {
 
     @Provides
     fun provideGoalRepository(dao: GoalDao): GoalRepository = GoalRepositoryImpl(dao)
+
 }
