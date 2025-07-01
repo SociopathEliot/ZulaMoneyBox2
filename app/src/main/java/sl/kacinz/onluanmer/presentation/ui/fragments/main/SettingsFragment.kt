@@ -66,6 +66,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SoonBlockedPrivateApi")
     private fun showSelectCurrencyDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_select_currency, null, false)
 
