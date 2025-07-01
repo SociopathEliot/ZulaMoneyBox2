@@ -141,6 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -149,6 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingVertical="15dp"
                     android:text="+ ADD SAVING"
                     android:textAllCaps="false"
                     app:backgroundTint="#FEDD32"
@@ -163,7 +165,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="- WITHDRAW MONEY"
+                    android:text="- WITHDRAW\nMONEY"
                     android:textAllCaps="false"
                     app:backgroundTint="@android:color/transparent"
                     app:cornerRadius="8dp"
@@ -186,15 +188,7 @@
                 app:strokeWidth="2dp"/>
 
             <!-- Transaction history (как прежде) -->
-            <TextView
-                android:id="@+id/tvTransactionHistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Transaction history"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
+
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -208,6 +202,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/tvTransactionHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transaction history"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="10dp"
+                        android:textStyle="bold"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvTransactions"

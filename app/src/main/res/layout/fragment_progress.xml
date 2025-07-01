@@ -177,35 +177,38 @@
                 android:layout_marginTop="12dp"
                 android:gravity="center"
                 android:layout_marginHorizontal="20dp"
-                android:orientation="horizontal"
-                android:paddingHorizontal="20dp">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/btnPrev"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_arrow_button"
-                    android:paddingVertical="16dp"
-                    android:paddingHorizontal="16dp"
-                    android:src="@drawable/ic_arrow_left"/>
-
-                <TextView
-                    android:id="@+id/tvRange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:text="Last week"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"/>
+                    android:background="@drawable/bg_arrow_button"
+                    android:paddingVertical="14dp"
+                    android:paddingHorizontal="16dp"
+                    android:src="@drawable/arrow_left_ic" />
 
+                <!-- Заполнитель, чтобы TvRange занял всё доступное место и текст в нём выравнивался по центру -->
+                <TextView
+                    android:id="@+id/tvRange"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Last month"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <!-- Следующий период -->
                 <ImageButton
                     android:id="@+id/btnNext"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_arrow_button"
-                    android:paddingVertical="16dp"
+                    android:paddingVertical="14dp"
                     android:paddingHorizontal="16dp"
-                    android:src="@drawable/ic_arrow_right"/>
+                    android:src="@drawable/arrow_right_ic" />
             </LinearLayout>
 
         </LinearLayout>

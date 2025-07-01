@@ -51,8 +51,12 @@ class WithdrawTransactionFragment : Fragment() {
             Toast.makeText(requireContext(), "Enter amount", Toast.LENGTH_SHORT).show()
             return
         }
-        val comment = binding.etComment.text.toString()
         val goal = args.goal
+        if (amount > goal.currentAmount) {
+            Toast.makeText(requireContext(), "Not enough money for this transaction", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val comment = binding.etComment.text.toString()
         val isDeposit = args.isDeposit
         val newAmount = if (isDeposit) goal.currentAmount + amount else goal.currentAmount - amount
         val updatedGoal = goal.copy(currentAmount = newAmount)
