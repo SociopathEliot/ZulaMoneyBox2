@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
@@ -119,7 +120,9 @@ class SettingsFragment : Fragment() {
             styleSelectedNumber(np)
         }
         np.setOnScrollListener { _, state ->
-            if (state == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+            if (state == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE ||
+                state == NumberPicker.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
+            ) {
                 styleSelectedNumber(np)
             }
         }
@@ -176,11 +179,11 @@ class SettingsFragment : Fragment() {
         for (i in 0 until np.childCount) {
             val child = np.getChildAt(i)
             if (child is EditText) {
-                child.setTextColor(Color.BLACK)
+                child.setTextColor(ColorStateList.valueOf(Color.BLACK))
                 child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
                 child.setTypeface(null, Typeface.BOLD)
-                child.isEnabled = false
                 child.isFocusable = false
+                child.isClickable = false
             }
         }
     }
