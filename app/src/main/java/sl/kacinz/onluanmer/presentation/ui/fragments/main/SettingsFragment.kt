@@ -66,7 +66,6 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SoonBlockedPrivateApi")
     private fun showSelectCurrencyDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_select_currency, null, false)
 
@@ -84,22 +83,6 @@ class SettingsFragment : Fragment() {
         val current = binding.tvCurrentCurrency.text.toString()
         val idx = currencies.indexOf(current).takeIf { it >= 0 } ?: 0
         np.value = idx
-
-        np.setOnValueChangedListener { _, _, _ ->
-            np.postDelayed({
-                for (i in 0 until np.childCount) {
-                    val child = np.getChildAt(i)
-                    if (child is EditText) {
-                        child.setTextColor(Color.BLACK)
-                        child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-                        child.setTypeface(null, Typeface.BOLD)
-                        child.isEnabled = false
-                        child.isFocusable = false
-                    }
-                }
-            }, 100) // задержка 100 мс – даёт NumberPicker время пересоздать элементы
-        }
-
 
         // Скрываем черные разделители
         try {
