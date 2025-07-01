@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog_rounded">
+    android:background="@drawable/bg_dialog_rounded"
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <!-- Заголовок -->
     <TextView
         android:id="@+id/tv_confirm_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Are you sure you want to reset all app data?"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:fontFamily="@font/micross"
         android:lineSpacingExtra="4dp"
-        android:paddingBottom="24dp"/>
+        android:gravity="center"
+        android:paddingBottom="24dp"
+        android:text="Are you sure you want to\n reset all app data?"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <!-- Кнопки -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="end"
+        android:orientation="horizontal"
         android:weightSum="2">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cancel"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingVertical="15dp"
+            android:fontFamily="@font/micross"
             android:text="CANCEL"
-            app:strokeWidth="1dp"
             android:textAllCaps="true"
+            android:textColor="@color/black"
             app:strokeColor="#FF3838"
-        android:textColor="@color/black"/>
+            app:strokeWidth="1dp" />
 
         <Space
             android:layout_width="16dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_delete"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingVertical="15dp"
+            android:backgroundTint="#DB0000"
+            android:fontFamily="@font/micross"
             android:text="DELETE"
             android:textAllCaps="true"
-            android:backgroundTint="#DB0000"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </LinearLayout>

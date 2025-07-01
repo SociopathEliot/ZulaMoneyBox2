@@ -1,11 +1,17 @@
 package sl.kacinz.onluanmer.presentation.ui.fragments.main
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.NumberPicker
 import android.widget.Toast
@@ -60,22 +66,80 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SoonBlockedPrivateApi")
     private fun showSelectCurrencyDialog() {
-        // 1) Inflate
         val dialogView = layoutInflater.inflate(R.layout.dialog_select_currency, null, false)
 
-        // 2) Подготовить NumberPicker
-        val currencies = arrayOf("CAD", "AUD", "USD", "EUR", "GBP", "JPY")
+        val currencies = arrayOf("CNY", "CAD", "AUD", "USD", "EUR", "GBP", "JPY")
         val np = dialogView.findViewById<NumberPicker>(R.id.np_currencies)
+
+        // Настройка NumberPicker
         np.minValue = 0
         np.maxValue = currencies.size - 1
         np.displayedValues = currencies
-        // выставим текущее значение
+        np.wrapSelectorWheel = false
+        np.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+
+        // Установка текущего значения
         val current = binding.tvCurrentCurrency.text.toString()
         val idx = currencies.indexOf(current).takeIf { it >= 0 } ?: 0
         np.value = idx
 
-        // 3) Создать AlertDialog
+        np.setOnValueChangedListener { _, _, _ ->
+            np.postDelayed({
+                for (i in 0 until np.childCount) {
+                    val child = np.getChildAt(i)
+                    if (child is EditText) {
+                        child.setTextColor(Color.BLACK)
+                        child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+                        child.setTypeface(null, Typeface.BOLD)
+                        child.isEnabled = false
+                        child.isFocusable = false
+                    }
+                }
+            }, 100) // задержка 100 мс – даёт NumberPicker время пересоздать элементы
+        }
+
+
+        // Скрываем черные разделители
+        try {
+            val fields = NumberPicker::class.java.declaredFields
+            for (field in fields) {
+                if (field.name == "mSelectionDivider") {
+                    field.isAccessible = true
+                    field.set(np, null)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Меняем цвет текста у невыбранных значений
+        try {
+            val selectorWheelPaintField = NumberPicker::class.java.getDeclaredField("mSelectorWheelPaint")
+            selectorWheelPaintField.isAccessible = true
+            val paint = selectorWheelPaintField.get(np) as Paint
+            paint.color = Color.parseColor("#AAAAAA")
+            paint.textSize = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, 16f, resources.displayMetrics
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Меняем стиль текста у центрального элемента (черный жирный)
+        for (i in 0 until np.childCount) {
+            val child = np.getChildAt(i)
+            if (child is EditText) {
+                child.setTextColor(Color.BLACK)
+                child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+                child.setTypeface(null, Typeface.BOLD)
+                child.isEnabled = false
+                child.isFocusable = false
+            }
+        }
+
+        // Создаем диалог
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -83,19 +147,21 @@ class SettingsFragment : Fragment() {
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
 
-        // 4) Крестик
+        // Крестик
         dialogView.findViewById<ImageView>(R.id.iv_close).setOnClickListener {
             dialog.dismiss()
         }
 
-        // 5) Кнопка OK
+        // OK
         dialogView.findViewById<MaterialButton>(R.id.btn_ok).setOnClickListener {
-            val sel = currencies[np.value]
-            binding.tvCurrentCurrency.text = sel
-            viewModel.setCurrency(sel)
+            val selected = currencies[np.value]
+            binding.tvCurrentCurrency.text = selected
+            viewModel.setCurrency(selected)
             dialog.dismiss()
         }
     }
+
+
 
     private fun showConfirmResetDialog() {
         val view = layoutInflater.inflate(R.layout.dialog_confirm_reset, null, false)

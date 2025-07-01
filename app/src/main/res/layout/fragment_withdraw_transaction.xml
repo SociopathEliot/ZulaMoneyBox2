@@ -28,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="15dp"
+            android:fontFamily="@font/micross"
 
             android:textSize="30sp"
             android:paddingStart="16dp"
@@ -52,11 +53,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:textColorHint="#A7A7A7"
             android:background="@drawable/bg_input_field"
             android:hint="Entering the amount"
             android:inputType="numberDecimal"
             android:padding="12dp"
-            android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +71,7 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_input_field"
             android:gravity="top"
+            android:textColorHint="#A7A7A7"
             android:hint="Comment field"
             android:inputType="textMultiLine"
             android:minLines="4"
@@ -92,7 +94,7 @@
 
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp"
+            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etComment">
@@ -101,7 +103,7 @@
                 android:id="@+id/ivCalendar"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_calendar" />
+                android:src="@drawable/ic_date_black" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -109,6 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="23.06.2026"
+                android:textStyle="bold"
+                android:fontFamily="@font/micross"
                 android:textColor="#001443"
                 android:textSize="16sp" />
         </LinearLayout>

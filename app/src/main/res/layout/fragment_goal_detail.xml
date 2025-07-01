@@ -29,6 +29,7 @@
         <TextView
             android:id="@+id/tvDetailTitle"
             android:layout_width="0dp"
+            android:fontFamily="@font/micross"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:gravity="center_vertical"
@@ -103,6 +104,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/micross"
                     android:text="14 500$ / 34 000$"
                     android:textColor="#000000"
                     android:textSize="14sp"/>
@@ -121,6 +124,7 @@
                     android:text="The goal is accomplished by:"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
+                    android:fontFamily="@font/micross"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
@@ -129,6 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="42%"
+                    android:fontFamily="@font/micross"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:textSize="14sp"
@@ -150,6 +155,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/micross"
                     android:paddingVertical="15dp"
                     android:text="+ ADD SAVING"
                     android:textAllCaps="false"
@@ -165,6 +173,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/micross"
                     android:text="- WITHDRAW\nMONEY"
                     android:textAllCaps="false"
                     app:backgroundTint="@android:color/transparent"
@@ -178,8 +188,11 @@
                 android:id="@+id/btnProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
+                android:paddingVertical="16dp"
                 android:text="📈 PROGRESS"
+                android:textStyle="bold"
+                android:fontFamily="@font/micross"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 app:backgroundTint="@android:color/transparent"
@@ -210,6 +223,7 @@
                         android:text="Transaction history"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
+                        android:fontFamily="@font/micross"
                         android:layout_marginBottom="10dp"
                         android:textStyle="bold"/>
 
@@ -227,6 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/micross"
                         android:text="Show more..."
                         android:textColor="@android:color/white"
                         android:textSize="14sp"/>

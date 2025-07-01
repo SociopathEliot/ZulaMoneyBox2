@@ -33,14 +33,29 @@
             android:contentDescription="Close" />
     </FrameLayout>
 
-    <!-- Колёсико с валютами -->
-    <NumberPicker
-        android:id="@+id/np_currencies"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp" />
+        android:layout_marginTop="16dp">
 
+        <!-- Фон под центральным элементом -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_numberpicker_center"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"/>
+
+        <!-- Сам NumberPicker -->
+        <NumberPicker
+            android:id="@+id/np_currencies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:descendantFocusability="blocksDescendants"
+            android:overScrollMode="never" />
+    </FrameLayout>
     <!-- Кнопка OK -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_ok"

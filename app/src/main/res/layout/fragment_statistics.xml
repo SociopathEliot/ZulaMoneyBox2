@@ -8,17 +8,17 @@
     android:fillViewport="true"
     android:background="#001443">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-        <!-- 1. Toolbar -->
         <TextView
             android:id="@+id/toolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#11267E"
+            android:fontFamily="@font/micross"
             android:padding="12dp"
             android:text="Statistics"
             android:textColor="#FFFFFF"
@@ -36,6 +36,7 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:padding="12dp"
+            android:layout_marginHorizontal="20dp"
             android:background="@drawable/bg_card_white"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/micross"
                 android:text="Total amount of all accumulated funds"
                 android:textColor="#001443"
                 android:textSize="16sp"/>
@@ -54,6 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="22 500$"
+                android:fontFamily="@font/micross"
                 android:textColor="#001443"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -66,6 +69,7 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:padding="12dp"
+            android:layout_marginHorizontal="20dp"
             android:background="@drawable/bg_card_white"
             app:layout_constraintTop_toBottomOf="@id/cardTotal"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Active goals"
+                android:fontFamily="@font/micross"
                 android:textColor="#001443"
                 android:textSize="16sp"/>
 
@@ -84,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2"
+                android:fontFamily="@font/micross"
                 android:textColor="#001443"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -107,6 +113,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Top Months"
+            android:fontFamily="@font/micross"
+            android:layout_marginStart="20dp"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -119,6 +127,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="20dp"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/tvTopMonthsLabel"
@@ -132,6 +141,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Average Metrics"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/micross"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -143,6 +154,7 @@
             android:id="@+id/avgMetricsContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/tvAvgMetricsLabel"
@@ -161,6 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/micross"
                     android:text="Average amount per month"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"/>
@@ -170,6 +183,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1 428$"
+                    android:fontFamily="@font/micross"
+
                     android:textColor="#FEDD32"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -186,6 +201,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/micross"
+
                     android:text="Average amount of one transaction"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"/>
@@ -195,6 +212,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="425$"
+                    android:fontFamily="@font/micross"
+
                     android:textColor="#FEDD32"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -208,6 +227,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
+            android:layout_marginHorizontal="20dp"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/avgMetricsContainer"
             app:layout_constraintStart_toStartOf="parent"
@@ -229,6 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/micross"
                 android:gravity="center"
                 android:text="Last month"
                 android:textColor="#FFFFFF"
@@ -254,6 +275,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="#FEDD32"
             android:text="BACK"
+            android:layout_marginHorizontal="20dp"
             android:textColor="#001443"
             android:textSize="18sp"
             app:cornerRadius="5dp"

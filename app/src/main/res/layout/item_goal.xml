@@ -22,6 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="New Car"
+            android:fontFamily="@font/micross"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -68,6 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:textStyle="bold"
+                android:fontFamily="@font/micross"
                 android:text="14 500$ / 34 000$"
                 android:textColor="#000000"
                 android:textSize="14sp"/>
@@ -79,8 +82,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:fontFamily="@font/micross"
             android:text="The goal is accomplished by:"
-            android:textColor="#000000"
+            android:textColor="#6D6C6C"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/fl_progress"
             app:layout_constraintStart_toStartOf="@id/fl_progress"
@@ -92,8 +96,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="42%"
+            android:fontFamily="@font/micross"
             android:textColor="#000000"
             android:textSize="14sp"
+
             android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_goal_label"
             app:layout_constraintEnd_toEndOf="@id/fl_progress"/>
