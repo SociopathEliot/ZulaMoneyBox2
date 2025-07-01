@@ -112,14 +112,15 @@ class SettingsFragment : Fragment() {
         }
 
         // Меняем стиль текста у центрального элемента (черный жирный)
-        for (i in 0 until np.childCount) {
-            val child = np.getChildAt(i)
-            if (child is EditText) {
-                child.setTextColor(Color.BLACK)
-                child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-                child.setTypeface(null, Typeface.BOLD)
-                child.isEnabled = false
-                child.isFocusable = false
+        styleSelectedNumber(np)
+
+        // Следим за изменениями чтобы сохранять черный цвет выбранного значения
+        np.setOnValueChangedListener { _, _, _ ->
+            styleSelectedNumber(np)
+        }
+        np.setOnScrollListener { _, state ->
+            if (state == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                styleSelectedNumber(np)
             }
         }
 
@@ -169,5 +170,18 @@ class SettingsFragment : Fragment() {
         viewModel.clearAll()
         Toast.makeText(requireContext(), "All data reset", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack(R.id.goalListFragment, false)
+    }
+
+    private fun styleSelectedNumber(np: NumberPicker) {
+        for (i in 0 until np.childCount) {
+            val child = np.getChildAt(i)
+            if (child is EditText) {
+                child.setTextColor(Color.BLACK)
+                child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+                child.setTypeface(null, Typeface.BOLD)
+                child.isEnabled = false
+                child.isFocusable = false
+            }
+        }
     }
 }
