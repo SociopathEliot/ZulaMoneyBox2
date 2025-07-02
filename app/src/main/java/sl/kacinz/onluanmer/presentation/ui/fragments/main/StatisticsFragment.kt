@@ -204,8 +204,6 @@ class StatisticsFragment : Fragment() {
                 setDrawGridLines(true)
                 gridColor = Color.parseColor("#445270")
                 axisLineColor = Color.parseColor("#445270")
-                axisMaximum = 500f
-                axisMinimum = 0f
             }
             animateX(500)
             invalidate()

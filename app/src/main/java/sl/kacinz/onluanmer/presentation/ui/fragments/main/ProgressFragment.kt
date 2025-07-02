@@ -186,8 +186,6 @@ class ProgressFragment : Fragment() {
                 setDrawGridLines(true)
                 gridColor       = Color.parseColor("#445270")
                 axisLineColor   = Color.parseColor("#445270")
-                axisMaximum     = 500f
-                axisMinimum     = 0f
             }
 
             // optional: a quick animation
