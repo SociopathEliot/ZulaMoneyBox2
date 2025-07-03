@@ -147,10 +147,46 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun updateChart(transactions: List<Transaction>) {
+        when (ranges[rangeIndex]) {
+            TimeRange.LAST_WEEK -> drawDaily(transactions)
+            TimeRange.LAST_MONTH, TimeRange.LAST_YEAR -> drawMonthly(transactions)
+            TimeRange.ALL_TIME -> drawYearly(transactions)
+
+        }
+    }
+
+    private fun drawDaily(transactions: List<Transaction>) {
+        val parseFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val labelFmt = DateTimeFormatter.ofPattern("dd.MM")
+
+        val parsedDates = transactions.map { LocalDate.parse(it.date, parseFmt) }.sorted()
+        if (parsedDates.isEmpty()) return
+
+        val startDate = parsedDates.first()
+        val lastDate = parsedDates.last()
+        val endForLabel = lastDate.plusDays(1)
+
+        val allDates = generateSequence(startDate) { it.plusDays(1) }
+            .takeWhile { !it.isAfter(endForLabel) }
+            .toList()
+
+        val txByDate = transactions.associateBy { LocalDate.parse(it.date, parseFmt) }
+
+        val step = 100f
+        val entries = allDates.dropLast(1).mapIndexed { idx, date ->
+            val raw = txByDate[date]?.amount?.toFloat() ?: 0f
+            val snapped = (raw / step).toInt() * step
+            Entry(idx + 1f, snapped)
+        }
+
+        val labels = listOf("") + allDates.map { it.format(labelFmt) }
+        applyChart(entries, labels, step)
+    }
+
+    private fun drawMonthly(transactions: List<Transaction>) {
         val parseFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val labelFmt = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
 
-        // Parse all dates and determine month range
         val parsedDates = transactions.map { LocalDate.parse(it.date, parseFmt) }
         if (parsedDates.isEmpty()) return
 
@@ -158,12 +194,10 @@ class StatisticsFragment : Fragment() {
         val lastMonth = YearMonth.from(parsedDates.maxOrNull()!!)
         val endForLabel = lastMonth.plusMonths(1)
 
-        // Complete list of months in range (+1 for right gap)
         val months = generateSequence(startMonth) { it.plusMonths(1) }
             .takeWhile { !it.isAfter(endForLabel) }
             .toList()
 
-        // Sum of transactions per month
         val sumsByMonth = transactions.groupBy { YearMonth.from(LocalDate.parse(it.date, parseFmt)) }
             .mapValues { entry -> entry.value.sumOf { it.amount }.toFloat() }
 
@@ -175,6 +209,35 @@ class StatisticsFragment : Fragment() {
         }
 
         val labels = listOf("") + months.map { it.atDay(1).format(labelFmt) }
+        applyChart(entries, labels, step)
+    }
+
+    private fun drawYearly(transactions: List<Transaction>) {
+        val parseFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        val parsedDates = transactions.map { LocalDate.parse(it.date, parseFmt) }
+        if (parsedDates.isEmpty()) return
+
+        val startYear = parsedDates.minOrNull()!!.year
+        val endYear = parsedDates.maxOrNull()!!.year
+
+        val years = (startYear..endYear + 1).toList()
+
+        val sumsByYear = transactions.groupBy { LocalDate.parse(it.date, parseFmt).year }
+            .mapValues { entry -> entry.value.sumOf { it.amount }.toFloat() }
+
+        val step = 100f
+        val entries = years.dropLast(1).mapIndexed { idx, year ->
+            val raw = sumsByYear[year] ?: 0f
+            val snapped = (raw / step).toInt() * step
+            Entry(idx + 1f, snapped)
+        }
+
+        val labels = listOf("") + years.map { it.toString() }
+        applyChart(entries, labels, step)
+    }
+
+    private fun applyChart(entries: List<Entry>, labels: List<String>, step: Float) {
 
         val dataSet = LineDataSet(entries, "").apply {
             mode = LineDataSet.Mode.LINEAR
