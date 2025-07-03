@@ -151,6 +151,7 @@ class StatisticsFragment : Fragment() {
             TimeRange.LAST_WEEK -> drawDaily(transactions)
             TimeRange.LAST_MONTH, TimeRange.LAST_YEAR -> drawMonthly(transactions)
             TimeRange.ALL_TIME -> drawYearly(transactions)
+
         }
     }
 
@@ -237,6 +238,7 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun applyChart(entries: List<Entry>, labels: List<String>, step: Float) {
+
         val dataSet = LineDataSet(entries, "").apply {
             mode = LineDataSet.Mode.LINEAR
             setDrawValues(false)
