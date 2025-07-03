@@ -32,6 +32,7 @@ import sl.kacinz.onluanmer.utils.TimeRange
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
@@ -146,65 +147,93 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun updateChart(transactions: List<Transaction>) {
-        val sorted = transactions.sortedBy { LocalDate.parse(it.date, formatter) }
-        val entries = mutableListOf<Entry>()
-        val labels = mutableListOf<String>()
-        var sum = 0f
-        sorted.forEachIndexed { i, tx ->
-            sum += tx.amount
-            entries.add(Entry(i.toFloat(), sum))
-            labels.add(tx.date.substring(0,5))
+        val parseFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val labelFmt = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
+
+        // Parse all dates and determine month range
+        val parsedDates = transactions.map { LocalDate.parse(it.date, parseFmt) }
+        if (parsedDates.isEmpty()) return
+
+        val startMonth = YearMonth.from(parsedDates.minOrNull()!!)
+        val lastMonth = YearMonth.from(parsedDates.maxOrNull()!!)
+        val endForLabel = lastMonth.plusMonths(1)
+
+        // Complete list of months in range (+1 for right gap)
+        val months = generateSequence(startMonth) { it.plusMonths(1) }
+            .takeWhile { !it.isAfter(endForLabel) }
+            .toList()
+
+        // Sum of transactions per month
+        val sumsByMonth = transactions.groupBy { YearMonth.from(LocalDate.parse(it.date, parseFmt)) }
+            .mapValues { entry -> entry.value.sumOf { it.amount }.toFloat() }
+
+        val step = 100f
+        val entries = months.dropLast(1).mapIndexed { idx, ym ->
+            val raw = sumsByMonth[ym] ?: 0f
+            val snapped = (raw / step).toInt() * step
+            Entry(idx + 1f, snapped)
         }
 
+        val labels = listOf("") + months.map { it.atDay(1).format(labelFmt) }
+
         val dataSet = LineDataSet(entries, "").apply {
-            setDrawValues(false)
             mode = LineDataSet.Mode.LINEAR
-            color = Color.parseColor("#FEDD32")
+            setDrawValues(false)
+            color = Color.parseColor("#FFC107")
             lineWidth = 2f
             setDrawCircles(true)
             circleRadius = 6f
             circleHoleRadius = 3f
-            setCircleColor(Color.parseColor("#FEDD32"))
-            circleHoleColor = Color.WHITE
+            setCircleColor(Color.parseColor("#FFC107"))
+            circleHoleColor = Color.parseColor("#0D1B3D")
+            setDrawCircleHole(true)
             setDrawFilled(true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_chart_fill)
-            } else {
-                fillColor = Color.parseColor("#FEDD32")
-                fillAlpha = 80
-            }
+            fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_chart_fill)
         }
 
         binding.lineChart.apply {
             data = LineData(dataSet)
-            setBackgroundColor(Color.parseColor("#001443"))
+            setBackgroundColor(Color.parseColor("#0D1B3D"))
             setDrawGridBackground(false)
             setTouchEnabled(false)
             axisRight.isEnabled = false
             legend.isEnabled = false
-            description = Description().apply {
-                text = "Amount of savings"
-                textColor = Color.WHITE
-                textSize = 14f
-                setPosition(10f,15f)
-            }
+
+            val dp = resources.displayMetrics.density
+            setExtraOffsets(0f * dp, 0f, 0f * dp, 0f * dp)
+
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 valueFormatter = IndexAxisValueFormatter(labels)
                 granularity = 1f
-                textColor = Color.WHITE
+                isGranularityEnabled = true
+                setLabelCount(labels.size, true)
+                setAvoidFirstLastClipping(true)
+                setAxisMinimum(0f)
+                setAxisMaximum((labels.size - 1).toFloat())
                 textSize = 12f
+                textColor = Color.WHITE
+                setDrawAxisLine(false)
                 setDrawGridLines(true)
-                gridColor = Color.parseColor("#445270")
-                axisLineColor = Color.parseColor("#445270")
+                gridColor = Color.parseColor("#4D6F7D9C")
+                gridLineWidth = 1f
             }
+
             axisLeft.apply {
-                textColor = Color.WHITE
+                val maxY = dataSet.yMax
+                val top = ((maxY / step).toInt() + 1) * step
+                setAxisMinimum(0f)
+                setAxisMaximum(top)
+                setLabelCount((top / step).toInt() + 1, true)
                 textSize = 12f
+                textColor = Color.WHITE
+                setDrawAxisLine(false)
                 setDrawGridLines(true)
-                gridColor = Color.parseColor("#445270")
-                axisLineColor = Color.parseColor("#445270")
+                gridColor = Color.parseColor("#4D6F7D9C")
+                gridLineWidth = 1f
             }
+
+            description.isEnabled = false
             animateX(500)
             invalidate()
         }
