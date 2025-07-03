@@ -289,6 +289,7 @@ class StatisticsFragment : Fragment() {
             }
 
             axisLeft.apply {
+                val step = 100f
                 val maxY = dataSet.yMax
                 val step = computeAxisStep(maxY)
                 val top = ceil(maxY / step) * step
@@ -299,6 +300,7 @@ class StatisticsFragment : Fragment() {
                 valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                     override fun getFormattedValue(value: Float): String = value.toKString()
                 }
+
                 textSize = 12f
                 textColor = Color.WHITE
                 setDrawAxisLine(false)
