@@ -285,20 +285,12 @@ class StatisticsFragment : Fragment() {
             }
 
             axisLeft.apply {
+                val step = 100f
                 val maxY = dataSet.yMax
-                val minY = dataSet.yMin
-                val range = maxY - minY
-                val extra = if (range == 0f) maxY * 0.1f else range * 0.1f
-                val top = maxY + extra
-                val bottom = if (minY > 0f) 0f else minY
-                val step = (top - bottom) / 5f
-                setAxisMinimum(bottom)
+                val top = ((maxY / step).toInt() + 1) * step
+                setAxisMinimum(0f)
                 setAxisMaximum(top)
-                setLabelCount(6, true)
-                granularity = step
-                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String = value.toKString()
-                }
+                setLabelCount((top / step).toInt() + 1, true)
                 textSize = 12f
                 textColor = Color.WHITE
                 setDrawAxisLine(false)
