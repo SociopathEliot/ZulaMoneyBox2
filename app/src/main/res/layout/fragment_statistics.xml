@@ -95,17 +95,23 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- 3. График -->
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChart"
+        <!-- 3. Responsive chart wrapper with 16:9 ratio -->
+        <FrameLayout
+            android:id="@+id/chartWrapper"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/bg_chart_panel"
             app:layout_constraintTop_toBottomOf="@id/cardGoals"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.32"/>
+            app:layout_constraintDimensionRatio="16:9">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_chart_panel"/>
+        </FrameLayout>
 
         <!-- 4. Top Months заголовок -->
         <TextView
@@ -119,7 +125,7 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/lineChart"
+            app:layout_constraintTop_toBottomOf="@id/chartWrapper"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <!-- 5. Top Months RecyclerView -->
