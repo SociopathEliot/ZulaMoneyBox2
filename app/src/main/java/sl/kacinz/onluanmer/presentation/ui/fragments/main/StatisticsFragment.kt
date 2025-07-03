@@ -34,6 +34,10 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.log10
+import kotlin.math.pow
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
@@ -287,10 +291,16 @@ class StatisticsFragment : Fragment() {
             axisLeft.apply {
                 val step = 100f
                 val maxY = dataSet.yMax
-                val top = ((maxY / step).toInt() + 1) * step
+                val step = computeAxisStep(maxY)
+                val top = ceil(maxY / step) * step
                 setAxisMinimum(0f)
                 setAxisMaximum(top)
                 setLabelCount((top / step).toInt() + 1, true)
+                granularity = step
+                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String = value.toKString()
+                }
+
                 textSize = 12f
                 textColor = Color.WHITE
                 setDrawAxisLine(false)
@@ -303,6 +313,20 @@ class StatisticsFragment : Fragment() {
             animateX(500)
             invalidate()
         }
+    }
+
+    private fun computeAxisStep(maxValue: Float): Float {
+        if (maxValue <= 0f) return 1f
+        val raw = maxValue / 5f
+        val magnitude = 10f.pow(floor(log10(raw)))
+        val residual = raw / magnitude
+        val step = when {
+            residual <= 1f -> 1f
+            residual <= 2f -> 2f
+            residual <= 5f -> 5f
+            else -> 10f
+        }
+        return step * magnitude
     }
 
     override fun onDestroyView() {
