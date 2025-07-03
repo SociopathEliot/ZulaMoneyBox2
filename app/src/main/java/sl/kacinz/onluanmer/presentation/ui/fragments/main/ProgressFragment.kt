@@ -82,11 +82,13 @@ class ProgressFragment : Fragment() {
                 }
             }
         }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigateUp()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigateUp()
+                }
+            })
     }
 
     private fun changeRange(delta: Int) {
@@ -123,78 +125,113 @@ class ProgressFragment : Fragment() {
     }
 
     private fun updateChart(transactions: List<Transaction>) {
-        // 1. prepare entries & labels
-        val sorted = transactions.sortedBy { LocalDate.parse(it.date, formatter) }
-        val entries = mutableListOf<Entry>()
-        val labels  = mutableListOf<String>()
-        var sum = 0f
-        sorted.forEachIndexed { i, tx ->
-            sum += tx.amount
-            entries.add(Entry(i.toFloat(), sum))
-            labels.add(tx.date.substring(0, 5)) // "dd.MM"
-        }
+        // 1. Two formatters
+        val parseFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val labelFmt = DateTimeFormatter.ofPattern("dd.MM")
 
-        // 2. configure the dataset
+        // 2. Parse & sort
+        val parsedDates = transactions
+            .map { LocalDate.parse(it.date, parseFmt) }
+            .sorted()
+        if (parsedDates.isEmpty()) return
+
+        // 3. Range +1 day
+        val startDate = parsedDates.first()
+        val lastDate = parsedDates.last()
+        val endForLabel = lastDate.plusDays(1)
+
+        // 4. Build full date list
+        val allDates = generateSequence(startDate) { it.plusDays(1) }
+            .takeWhile { !it.isAfter(endForLabel) }
+            .toList()
+
+        // 5. Quick lookup
+        val txByDate = transactions.associateBy { LocalDate.parse(it.date, parseFmt) }
+
+        // 6. Snap y to nearest lower 100, shift right by 1 cell for that left‐gap
+        val step = 100f
+        val entries = allDates
+            .dropLast(1)
+            .mapIndexed { idx, date ->
+                val raw = txByDate[date]?.amount?.toFloat() ?: 0f
+                val snapped = (raw / step).toInt() * step
+                Entry(idx + 1f, snapped)
+            }
+
+        // 7. Labels with that extra day on the right
+        val labels = listOf("") + allDates.map { it.format(labelFmt) }
+
+        // 8. DataSet styling (unchanged)
         val dataSet = LineDataSet(entries, "").apply {
+            mode = LineDataSet.Mode.LINEAR
             setDrawValues(false)
-            mode = LineDataSet.Mode.LINEAR      // or CUBIC_BEZIER for smooth curve
-            color = Color.parseColor("#FEDD32")
+            color = Color.parseColor("#FFC107")
             lineWidth = 2f
-
             setDrawCircles(true)
             circleRadius = 6f
             circleHoleRadius = 3f
-            setCircleColor(Color.parseColor("#FEDD32"))
-            circleHoleColor = Color.WHITE
-
+            setCircleColor(Color.parseColor("#FFC107"))
+            circleHoleColor = Color.parseColor("#0D1B3D")
+            setDrawCircleHole(true)
             setDrawFilled(true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_chart_fill)
-            } else {
-                fillColor = Color.parseColor("#FEDD32")
-                fillAlpha = 80
-            }
+            fillDrawable = ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.gradient_chart_fill
+            )
         }
 
-        // 3. apply to chart
+        // 9. Chart setup (unchanged)
         binding.lineChart.apply {
             data = LineData(dataSet)
-            setBackgroundColor(Color.parseColor("#001443"))
+            setBackgroundColor(Color.parseColor("#0D1B3D"))
             setDrawGridBackground(false)
             setTouchEnabled(false)
             axisRight.isEnabled = false
-            legend.isEnabled    = false
+            legend.isEnabled = false
+// dp → px helper
+            val dp = resources.displayMetrics.density
 
-            // a) chart title
-            description = Description().apply {
-                text      = "Amount of savings"
-                textColor = Color.WHITE
-                textSize  = 14f
-                setPosition(10f,  15f)
-            }
+// inset: left 8dp, top 0, right 24dp, bottom 16dp
+            setExtraOffsets(
+                0f * dp,
+                0f,
+                0f * dp,
+                0f * dp
+            )
 
-            // b) X axis
+
             xAxis.apply {
-                position        = XAxis.XAxisPosition.BOTTOM
-                valueFormatter  = IndexAxisValueFormatter(labels)
-                granularity     = 1f
-                textColor       = Color.WHITE
-                textSize        = 12f
+                position = XAxis.XAxisPosition.BOTTOM
+                valueFormatter = IndexAxisValueFormatter(labels)
+                granularity = 1f
+                isGranularityEnabled = true
+                setLabelCount(labels.size, true)
+                setAvoidFirstLastClipping(true)
+                setAxisMinimum(0f)
+                setAxisMaximum((labels.size - 1).toFloat())
+                textSize = 12f
+                textColor = Color.WHITE
+                setDrawAxisLine(false)
                 setDrawGridLines(true)
-                gridColor       = Color.parseColor("#445270")
-                axisLineColor   = Color.parseColor("#445270")
+                gridColor = Color.parseColor("#4D6F7D9C")
+                gridLineWidth = 1f
             }
 
-            // c) Y axis
             axisLeft.apply {
-                textColor       = Color.WHITE
-                textSize        = 12f
+                val maxY = dataSet.yMax
+                val top = ((maxY / step).toInt() + 1) * step
+                setAxisMinimum(0f)
+                setAxisMaximum(top)
+                setLabelCount((top / step).toInt() + 1, true)
+                textSize = 12f
+                textColor = Color.WHITE
+                setDrawAxisLine(false)
                 setDrawGridLines(true)
-                gridColor       = Color.parseColor("#445270")
-                axisLineColor   = Color.parseColor("#445270")
+                gridColor = Color.parseColor("#4D6F7D9C")
+                gridLineWidth = 1f
             }
 
-            // optional: a quick animation
+            description.isEnabled = false
             animateX(500)
             invalidate()
         }

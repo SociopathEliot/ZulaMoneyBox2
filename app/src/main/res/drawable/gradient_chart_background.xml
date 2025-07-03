@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- base vertical navy gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="90"
+                android:startColor="#001443"
+                android:endColor="#001443"
+                android:type="linear"/>
+        </shape>
+    </item>
+
+    <!-- tiled square grid overlay -->
+    <item
+        android:drawable="@drawable/grid_pattern"
+        android:tileMode="repeat"/>
+</layer-list>

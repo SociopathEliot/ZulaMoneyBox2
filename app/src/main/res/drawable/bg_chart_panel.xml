@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- solid panel color (#0D1B3D) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0D1B3D"/>
+        </shape>
+    </item>
+
+    <!-- tiled grid: 32dp cells, 1dp stroke of #6F7D9C @30% -->
+    <item android:drawable="@drawable/grid_pattern"/>
+</layer-list>
