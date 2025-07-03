@@ -125,6 +125,7 @@ class StatisticsFragment : Fragment() {
         }
     }
 
+
     private fun updateMetrics(transactions: List<Transaction>) {
         val deposits = transactions.filter { it.amount > 0 }
         val avgTxn = if (deposits.isNotEmpty()) deposits.map { it.amount }.average() else 0.0
