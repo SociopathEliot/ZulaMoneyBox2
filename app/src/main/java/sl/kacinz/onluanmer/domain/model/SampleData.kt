@@ -6,6 +6,7 @@ object SampleData {
         name = "Demo Car Goal",
         targetAmount = 2000,
         date = "30.06.2024",
+
         imageUri = "android.resource://xx.example.sample/drawable/ic_safe",
         currentAmount = 1110
     )
