@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sl.kacinz.onluanmer.databinding.ItemMonthBinding
+import sl.kacinz.onluanmer.utils.toKString
 
 data class MonthAmount(val name: String, val amount: Int)
 
@@ -22,7 +23,7 @@ class MonthAdapter : ListAdapter<MonthAmount, MonthAdapter.MonthViewHolder>(Diff
     class MonthViewHolder(private val binding: ItemMonthBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MonthAmount) {
             binding.tvMonth.text = item.name
-            binding.tvAmount.text = "${item.amount}$"
+            binding.tvAmount.text = "${item.amount.toKString()}$"
         }
     }
 
