@@ -180,7 +180,7 @@ class StatisticsFragment : Fragment() {
         }
 
         val labels = listOf("") + allDates.map { it.format(labelFmt) }
-        applyChart(entries, labels, step)
+        applyChart(entries, labels)
     }
 
     private fun drawMonthly(transactions: List<Transaction>) {
@@ -209,7 +209,7 @@ class StatisticsFragment : Fragment() {
         }
 
         val labels = listOf("") + months.map { it.atDay(1).format(labelFmt) }
-        applyChart(entries, labels, step)
+        applyChart(entries, labels)
     }
 
     private fun drawYearly(transactions: List<Transaction>) {
@@ -217,6 +217,7 @@ class StatisticsFragment : Fragment() {
 
         val parsedDates = transactions.map { LocalDate.parse(it.date, parseFmt) }
         if (parsedDates.isEmpty()) return
+
 
         val startYear = parsedDates.minOrNull()!!.year
         val endYear = parsedDates.maxOrNull()!!.year
@@ -234,11 +235,10 @@ class StatisticsFragment : Fragment() {
         }
 
         val labels = listOf("") + years.map { it.toString() }
-        applyChart(entries, labels, step)
+        applyChart(entries, labels)
     }
 
-    private fun applyChart(entries: List<Entry>, labels: List<String>, step: Float) {
-
+    private fun applyChart(entries: List<Entry>, labels: List<String>) {
         val dataSet = LineDataSet(entries, "").apply {
             mode = LineDataSet.Mode.LINEAR
             setDrawValues(false)
@@ -284,10 +284,16 @@ class StatisticsFragment : Fragment() {
 
             axisLeft.apply {
                 val maxY = dataSet.yMax
-                val top = ((maxY / step).toInt() + 1) * step
-                setAxisMinimum(0f)
+                val minY = dataSet.yMin
+                val range = maxY - minY
+                val extra = if (range == 0f) maxY * 0.1f else range * 0.1f
+                val top = maxY + extra
+                val bottom = if (minY > 0f) 0f else minY
+                val step = (top - bottom) / 5f
+                setAxisMinimum(bottom)
                 setAxisMaximum(top)
-                setLabelCount((top / step).toInt() + 1, true)
+                setLabelCount(6, true)
+                granularity = step
                 textSize = 12f
                 textColor = Color.WHITE
                 setDrawAxisLine(false)
