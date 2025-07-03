@@ -288,9 +288,11 @@ class StatisticsFragment : Fragment() {
             }
 
             axisLeft.apply {
+                val step = 100f
                 val maxY = dataSet.yMax
                 val step = computeAxisStep(maxY)
                 val top = ((maxY / step).toInt() + 1) * step
+
                 setAxisMinimum(0f)
                 setAxisMaximum(top)
                 setLabelCount((top / step).toInt() + 1, true)
@@ -298,6 +300,7 @@ class StatisticsFragment : Fragment() {
                 valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                     override fun getFormattedValue(value: Float): String = value.toKString()
                 }
+
                 textSize = 12f
                 textColor = Color.WHITE
                 setDrawAxisLine(false)
