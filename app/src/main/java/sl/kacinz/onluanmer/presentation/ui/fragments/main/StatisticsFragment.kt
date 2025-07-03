@@ -152,6 +152,7 @@ class StatisticsFragment : Fragment() {
             TimeRange.LAST_WEEK -> drawDaily(transactions)
             TimeRange.LAST_MONTH, TimeRange.LAST_YEAR -> drawMonthly(transactions)
             TimeRange.ALL_TIME -> drawYearly(transactions)
+
         }
     }
 
@@ -217,6 +218,7 @@ class StatisticsFragment : Fragment() {
 
         val parsedDates = transactions.map { LocalDate.parse(it.date, parseFmt) }
         if (parsedDates.isEmpty()) return
+
 
         val startYear = parsedDates.minOrNull()!!.year
         val endYear = parsedDates.maxOrNull()!!.year
