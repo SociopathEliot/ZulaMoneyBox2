@@ -34,6 +34,9 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.floor
+import kotlin.math.log10
+import kotlin.math.pow
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
@@ -286,15 +289,11 @@ class StatisticsFragment : Fragment() {
 
             axisLeft.apply {
                 val maxY = dataSet.yMax
-                val minY = dataSet.yMin
-                val range = maxY - minY
-                val extra = if (range == 0f) maxY * 0.1f else range * 0.1f
-                val top = maxY + extra
-                val bottom = if (minY > 0f) 0f else minY
-                val step = (top - bottom) / 5f
-                setAxisMinimum(bottom)
+                val step = computeAxisStep(maxY)
+                val top = ((maxY / step).toInt() + 1) * step
+                setAxisMinimum(0f)
                 setAxisMaximum(top)
-                setLabelCount(6, true)
+                setLabelCount((top / step).toInt() + 1, true)
                 granularity = step
                 valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                     override fun getFormattedValue(value: Float): String = value.toKString()
@@ -311,6 +310,20 @@ class StatisticsFragment : Fragment() {
             animateX(500)
             invalidate()
         }
+    }
+
+    private fun computeAxisStep(maxValue: Float): Float {
+        if (maxValue <= 0f) return 1f
+        val raw = maxValue / 5f
+        val magnitude = 10f.pow(floor(log10(raw)))
+        val residual = raw / magnitude
+        val step = when {
+            residual <= 1f -> 1f
+            residual <= 2f -> 2f
+            residual <= 5f -> 5f
+            else -> 10f
+        }
+        return step * magnitude
     }
 
     override fun onDestroyView() {
